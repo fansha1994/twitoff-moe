@@ -30,16 +30,19 @@ def get_user(screen_name=None):
     tweets = twitter_api_client.user_timeline(screen_name, tweet_mode="extended", count=150)
     print("TWEETS COUNT:", len(tweets))
 
-    #all_tweet_texts = [status.full_text for status in statuses]
-    #embeddings = list(basilica_api.embed_sentences(all_tweet_texts, model="twitter"))
-    #print("NUMBER OF EMBEDDINGS", len(embeddings))
+    all_tweet_texts = [status.full_text for status in tweets]
+    embeddings = list(basilica_api_client.embed_sentences(all_tweet_texts, model="twitter"))
+    print("NUMBER OF EMBEDDINGS", len(embeddings))
 
-    for status in tweets:
+    for index, status in enumerate(tweets):
+        print(index)
         print(status.full_text)
         print("----")
 
-        embedding = basilica_api_client.embed_sentence(status.full_text, model="twitter")
-        print(len(embedding))
+        #embedding = basilica_api_client.embed_sentence(status.full_text, model="twitter")
+        #print(len(embedding))
+        embedding = embeddings[index]
+        
 
         # get existing tweet from the db or initialize a new one:
         db_tweet = Tweet.query.get(status.id) or Tweet(id=status.id)
