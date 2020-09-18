@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends "bootstrap_layout.html" %}
+
+{% block content %}
     
 
     <h2>Results!</h2>
@@ -15,7 +10,6 @@
         is '@{{ screen_name_most_likely }}'
     </p>
 
+{% endblock %}
 
-    
-</body>
-</html>
+
