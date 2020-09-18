@@ -2,7 +2,7 @@
 from flask import Blueprint, request, jsonify, render_template
 from sklearn.linear_model import LogisticRegression 
 from web_app.models import User
-#from web_app.services.basilica_service import basilica_api_client
+from web_app.services.basilica_service import connection as basilica_api_client
 
 stats_routes = Blueprint("stats_routes", __name__)
 
@@ -45,19 +45,18 @@ def predict():
 
     calssifier.fit(embeddings, labels)
 
-
     print("-----------------")
     print("MAKING A PREDICTION...") 
-    
-    example_embed_a = user_a_tweets[3].embedding
-    example_embed_b = user_b_tweets[3].embedding
+    #example_embed_a = user_a_tweets[3].embedding
+    #example_embed_b = user_b_tweets[3].embedding
+    #result = calssifier.predict([example_embed_a, example_embed_b])
 
-    result = calssifier.predict([example_embed_a, example_embed_b])
+    embedding = basilica_api_client.embed_sentence(tweet_text, model="twitter")
 
 
     return render_template("prediction_results.html",
         screen_name_a=screen_name_a,
         screen_name_b=screen_name_b,
         tweet_text=tweet_text,
-        screen_name_most_likely="TODO" 
+        screen_name_most_likely=result[0]
     )
