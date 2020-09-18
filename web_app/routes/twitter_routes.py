@@ -11,7 +11,7 @@ twitter_routes = Blueprint("twitter_routes", __name__)
 def get_user(screen_name=None):
     print(screen_name)
 
-# fetching data from twitter api
+    # fetching data from twitter api
     twitter_user = twitter_api_client.get_user(screen_name)
 
     # get existing user from the db or initialize a new one:

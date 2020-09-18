@@ -1,7 +1,7 @@
 
 from flask import Blueprint, request, jsonify, render_template
-#from sklearn.linear_model import LogisticRegression # for example
-#from web_app.models import User, Tweet
+from sklearn.linear_model import LogisticRegression 
+from web_app.models import User
 #from web_app.services.basilica_service import basilica_api_client
 
 stats_routes = Blueprint("stats_routes", __name__)
@@ -17,12 +17,44 @@ def predict():
     print("-----------------")
     print("FETCHING TWEETS FROM THE DATABASE...")
 
+    # get the embeddings (from the database)
+    user_a = User.query.filter_by(screen_name=screen_name_a).first()
+    user_b = User.query.filter_by(screen_name=screen_name_b).first()
+    user_a_tweets = user_a.tweets
+    user_b_tweets = user_b.tweets
+    print("FETCHED TWEETS", len(user_a_tweets), len(user_b_tweets))
+
     print("-----------------")
     print("TRAINING THE MODEL...")
+
+    # X values / inputs: embeddings
+    # y values / labels: screen_names
+
+    calssifier = LogisticRegression()
     
+    embeddings = []
+    labels = []
+
+    for tweets in user_a_tweets:
+        embeddings.append(tweet.embedding)
+        labels.append(screen_name_a) # tweet.user.screen_name
+
+    for tweets in user_b_tweets:
+        embeddings.append(tweet.embedding)
+        labels.append(screen_name_b) # tweet.user.screen_name    
+
+    calssifier.fit(embeddings, labels)
+
+
     print("-----------------")
     print("MAKING A PREDICTION...") 
     
+    example_embed_a = user_a_tweets[3].embedding
+    example_embed_b = user_b_tweets[3].embedding
+
+    result = calssifier.predict([example_embed_a, example_embed_b])
+
+
     return render_template("prediction_results.html",
         screen_name_a=screen_name_a,
         screen_name_b=screen_name_b,

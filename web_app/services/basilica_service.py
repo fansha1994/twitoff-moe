@@ -1,6 +1,5 @@
 
 
-
 from basilica import Connection
 import os
 from dotenv import load_dotenv
